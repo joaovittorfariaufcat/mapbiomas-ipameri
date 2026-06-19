@@ -80,7 +80,8 @@ cat("Estrutura de pastas criada.\n")
 ###############################
 
 url_bacias <- "https://metadados.snirh.gov.br/files/09436656-f4cf-4793-b169-33700b2d40ee/GEOFT_BHO_AREACONTRIBUICAO.zip"
-url_drenagem <- "https://metadados.snirh.gov.br/geonetwork/srv/api/records/09436656-f4cf-4793-b169-33700b2d40ee/attachments/geoft_bho_trecho_drenagem.zip"
+url_drenagem <- "https://metadados.snirh.gov.br/files/2091576b-6821-4320-ad87-2deb86753984/GEOFT_BHO_PAN_TDR.zip"
+
 
 dest_bacias <- "dados/bacias/bacias.zip"
 dest_drenagem <- "dados/drenagem/drenagem.zip"
@@ -109,8 +110,8 @@ unzip(dest_drenagem, exdir = "dados/drenagem")
 cat("Arquivos descompactados.\n")
 
 
-# 1.6 SHAPEFILES 
-###################################
+# 1.6 CARREGAR SHAPEFILES
+#########################
 
 arquivo_bacias <- list.files(
   path = "dados/bacias",
@@ -121,10 +122,20 @@ arquivo_bacias <- list.files(
 
 arquivo_drenagem <- list.files(
   path = "dados/drenagem",
-  pattern = "geoft_bho_trecho_drenagem.*\\.shp$",
+  pattern = "GEOFT_BHO_PAN_TDR.*\\.shp$",
   full.names = TRUE,
   recursive = TRUE
 )
+
+# Caso o nome seja diferente, procura qualquer shapefile
+if (length(arquivo_drenagem) == 0) {
+  arquivo_drenagem <- list.files(
+    path = "dados/drenagem",
+    pattern = "\\.shp$",
+    full.names = TRUE,
+    recursive = TRUE
+  )
+}
 
 if (length(arquivo_bacias) == 0) {
   stop("Shapefile de bacias não encontrado em dados/bacias.")
@@ -134,21 +145,42 @@ if (length(arquivo_drenagem) == 0) {
   stop("Shapefile de drenagem não encontrado em dados/drenagem.")
 }
 
-cat("Shapefile de bacias encontrado em:\n", arquivo_bacias[1], "\n")
-cat("Shapefile de drenagem encontrado em:\n", arquivo_drenagem[1], "\n")
+cat("Shapefile de bacias encontrado em:\n")
+print(arquivo_bacias)
 
+cat("Shapefile de drenagem encontrado em:\n")
+print(arquivo_drenagem)
+
+# Ler os arquivos
 bacias <- st_read(arquivo_bacias[1], quiet = TRUE)
 drenagem <- st_read(arquivo_drenagem[1], quiet = TRUE)
 
+# Salvar o nome da coluna de geometria
+geom_bacias <- attr(bacias, "sf_column")
+geom_drenagem <- attr(drenagem, "sf_column")
+
+# Padronizar nomes das colunas (SEM alterar a geometria)
+names(bacias)[names(bacias) != geom_bacias] <-
+  toupper(names(bacias)[names(bacias) != geom_bacias])
+
+names(drenagem)[names(drenagem) != geom_drenagem] <-
+  toupper(names(drenagem)[names(drenagem) != geom_drenagem])
+
+# Restaurar a geometria explicitamente
+st_geometry(bacias) <- geom_bacias
+st_geometry(drenagem) <- geom_drenagem
+
 cat("Camada de bacias carregada.\n")
+cat("Número de polígonos:", nrow(bacias), "\n")
+
 cat("Camada de drenagem carregada.\n")
+cat("Número de trechos:", nrow(drenagem), "\n")
 
 cat("Colunas de bacias:\n")
 print(names(bacias))
 
 cat("Colunas de drenagem:\n")
 print(names(drenagem))
-
 
 # 1.6.1 PADRONIZAR CRS E VALIDAR GEOMETRIAS
 ###########################################
