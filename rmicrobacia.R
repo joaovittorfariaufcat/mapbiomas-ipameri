@@ -598,48 +598,54 @@ mapbiomas <- mask(mapbiomas, bacia_vect)
 
 cat("Raster conferido e mascarado novamente pela microbacia.\n")
 
-# 3.5 LEGENDA MAPBIOMAS
+# 3.5 LEGENDA MAPBIOMAS - COLEÇÃO 10
 #######################
 
-# Ajuste conforme as classes realmente presentes no seu recorte.
-# Mantive uma legenda ampla para o período 1985-2023.
 legenda_mapbiomas <- data.frame(
   classe = c(
-    3, 4, 5, 6, 9, 11, 12, 13, 15,
-    18, 19, 20, 21, 23, 24, 25, 29,
-    30, 31, 32, 33, 36, 39, 40, 41, 46, 47, 48, 49, 50, 62
+    3, 4, 5, 6,
+    9, 11, 12, 13,
+    15, 18, 19, 20, 21,
+    23, 24, 25,
+    29, 30, 31, 32, 33,
+    35, 36, 39, 40, 41,
+    46, 47, 48, 49, 50,
+    62, 75, 27
   ),
   nome = c(
     "Formação Florestal",
     "Formação Savânica",
     "Mangue",
     "Floresta Alagável",
-    "Floresta Plantada",
-    "Área Úmida Natural",
-    "Formação Natural não Florestal",
-    "Campo Alagado",
+    "Silvicultura",
+    "Campo Alagado e Área Pantanosa",
+    "Formação Campestre",
+    "Outra Formação Natural Não Florestal",
     "Pastagem",
     "Agricultura",
     "Lavoura Temporária",
     "Cana",
     "Mosaico de Usos",
-    "Praia e Duna",
-    "Área Urbana",
+    "Praia, Duna e Areal",
+    "Área Urbanizada",
     "Outras Áreas Não Vegetadas",
     "Afloramento Rochoso",
     "Mineração",
     "Aquicultura",
     "Apicum",
-    "Corpos d'Água",
-    "Área Urbana",
+    "Rio, Lago e Oceano",
+    "Dendê",
+    "Lavoura Perene",
     "Soja",
     "Arroz",
     "Outras Lavouras Temporárias",
     "Café",
     "Citrus",
-    "Outras Perenes",
-    "Silvicultura",
+    "Outras Lavouras Perenes",
+    "Restinga Arbórea",
     "Restinga Herbácea",
+    "Algodão (beta)",
+    "Usina Fotovoltaica (beta)",
     "Não Observado"
   ),
   stringsAsFactors = FALSE
@@ -839,77 +845,93 @@ if(!exists("bacia_micro")){
 
 legenda_mapbiomas <- data.frame(
   classe = c(
-    3, 4, 5, 6, 9, 11, 12, 13, 15,
-    18, 19, 20, 21, 23, 24, 25, 29,
-    30, 31, 32, 33, 36, 39, 40, 41, 46, 47, 48, 49, 50, 62
+    3, 4, 5, 6,
+    9, 11, 12,
+    15, 18, 19, 20, 21,
+    23, 24, 25,
+    29, 30, 31, 32, 33,
+    35, 36, 39, 40, 41,
+    46, 47, 48, 49, 50,
+    62, 75, 27
   ),
   nome = c(
     "Formação Florestal",
     "Formação Savânica",
     "Mangue",
     "Floresta Alagável",
-    "Floresta Plantada",
-    "Área Úmida Natural",
-    "Formação Natural não Florestal",
-    "Campo Alagado",
+    
+    "Silvicultura",
+    "Campo Alagado e Área Pantanosa",
+    "Formação Campestre",
+    
     "Pastagem",
     "Agricultura",
     "Lavoura Temporária",
     "Cana",
     "Mosaico de Usos",
-    "Praia e Duna",
-    "Área Urbana",
+    
+    "Praia, Duna e Areal",
+    "Área Urbanizada",
     "Outras Áreas Não Vegetadas",
+    
     "Afloramento Rochoso",
     "Mineração",
     "Aquicultura",
     "Apicum",
-    "Corpos d'Água",
-    "Área Urbana",
+    "Rio, Lago e Oceano",
+    
+    "Dendê",
+    "Lavoura Perene",
     "Soja",
     "Arroz",
     "Outras Lavouras Temporárias",
+    
     "Café",
     "Citrus",
-    "Outras Perenes",
-    "Silvicultura",
+    "Outras Lavouras Perenes",
+    "Restinga Arbórea",
     "Restinga Herbácea",
+    
+    "Algodão (beta)",
+    "Usina Fotovoltaica (beta)",
     "Não Observado"
   ),
   stringsAsFactors = FALSE
-) %>%
-  distinct(classe, .keep_all = TRUE)
+)
 
 cores_mapbiomas <- c(
   "Formação Florestal" = "#1f8d49",
   "Formação Savânica" = "#7dc975",
   "Mangue" = "#04381d",
   "Floresta Alagável" = "#026975",
-  "Floresta Plantada" = "#7a5900",
-  "Área Úmida Natural" = "#519799",
-  "Formação Natural não Florestal" = "#d6bc74",
-  "Campo Alagado" = "#d89f5c",
+  "Silvicultura" = "#7a5900",
+  "Campo Alagado e Área Pantanosa" = "#519799",
+  "Formação Campestre" = "#d6bc74",
   "Pastagem" = "#edde8e",
   "Agricultura" = "#f5b3c8",
   "Lavoura Temporária" = "#ffefc3",
   "Cana" = "#db7093",
   "Mosaico de Usos" = "#ffb3ff",
-  "Praia e Duna" = "#ffd966",
-  "Área Urbana" = "#d4271e",
+  "Praia, Duna e Areal" = "#ffd966",
+  "Área Urbanizada" = "#d4271e",
   "Outras Áreas Não Vegetadas" = "#db4d4f",
   "Afloramento Rochoso" = "#b39ddb",
   "Mineração" = "#9c0027",
   "Aquicultura" = "#091077",
   "Apicum" = "#fc8114",
-  "Corpos d'Água" = "#2532e4",
+  "Rio, Lago e Oceano" = "#2532e4",
+  "Dendê" = "#7a0177",
+  "Lavoura Perene" = "#ff8c00",
   "Soja" = "#c71585",
   "Arroz" = "#f54ca9",
   "Outras Lavouras Temporárias" = "#ff69b4",
   "Café" = "#8b4513",
-  "Citrus" = "#ff8c00",
-  "Outras Perenes" = "#daa520",
-  "Silvicultura" = "#4caf50",
+  "Citrus" = "#ffb347",
+  "Outras Lavouras Perenes" = "#daa520",
+  "Restinga Arbórea" = "#4caf50",
   "Restinga Herbácea" = "#c2b280",
+  "Algodão (beta)" = "#e6b800",
+  "Usina Fotovoltaica (beta)" = "#ffe119",
   "Não Observado" = "#ffffff"
 )
 
@@ -1239,10 +1261,13 @@ indicadores_2000_2023 <- resultado_uso_solo %>%
         "Formação Savânica",
         "Mangue",
         "Floresta Alagável",
-        "Área Úmida Natural",
-        "Formação Natural não Florestal",
-        "Campo Alagado"
+        "Campo Alagado e Área Pantanosa",
+        "Formação Campestre",
+        "Outra Formação Natural Não Florestal",
+        "Restinga Arbórea",
+        "Restinga Herbácea"
       ) ~ "Coberturas Vegetais",
+      
       nome %in% c(
         "Pastagem",
         "Agricultura",
@@ -1253,10 +1278,27 @@ indicadores_2000_2023 <- resultado_uso_solo %>%
         "Cana",
         "Café",
         "Citrus",
-        "Outras Perenes"
+        "Outras Lavouras Perenes",
+        "Lavoura Perene",
+        "Dendê",
+        "Algodão (beta)"
       ) ~ "Agricultura e Agropecuária",
-      nome %in% c("Área Urbana") ~ "Áreas Urbanas",
-      nome %in% c("Corpos d'Água") ~ "Corpos d'Água",
+      
+      nome %in% c("Área Urbanizada") ~ "Áreas Urbanas",
+      
+      nome %in% c("Rio, Lago e Oceano") ~ "Corpos d'Água",
+      
+      nome %in% c(
+        "Outras Áreas Não Vegetadas",
+        "Afloramento Rochoso",
+        "Mineração",
+        "Aquicultura",
+        "Apicum",
+        "Praia, Duna e Areal",
+        "Usina Fotovoltaica (beta)",
+        "Não Observado"
+      ) ~ "Outros",
+      
       TRUE ~ "Outros"
     )
   ) %>%
@@ -1272,13 +1314,6 @@ indicadores_2000_2023 <- resultado_uso_solo %>%
       NA
     )
   )
-
-write.csv2(
-  indicadores_2000_2023,
-  "resultados/tabelas/indicadores_mudanca_2000_2023.csv",
-  row.names = FALSE
-)
-
 # 4.16 EXIBIÇÕES FINAIS
 #######################
 
@@ -1294,3 +1329,24 @@ cat("- resultados/mapas/\n")
 cat("- resultados/graficos/\n")
 cat("- resultados/tabelas/\n")
 cat("- resultados/rasters/\n")
+
+for(i in 1:nlyr(mapbiomas)){
+  cat(
+    anos[i], ":",
+    sort(unique(values(mapbiomas[[i]]))),
+    "\n"
+  )
+}
+
+sort(unique(resultado_uso_solo$classe))
+
+resultado_uso_solo %>%
+  filter(nome == "Não Observado")
+
+resultado_uso_solo %>%
+  filter(classe == 41) %>%
+  select(ano, area_ha, proporcao_percent)
+
+resultado_uso_solo %>%
+  filter(ano %in% c(1985, 2000, 2010, 2020, 2023),
+         classe == 41)
